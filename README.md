@@ -1,0 +1,2 @@
+# AmazingRust
+Learn Rust Examples

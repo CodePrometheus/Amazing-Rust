@@ -15,8 +15,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
-mod opts;
+mod cli;
 mod process;
 
-pub use opts::{Opts, SubCommand};
-pub use process::*;
+pub use cli::{Opts, SubCommand, Base64SubCommand};
+pub use process::{process_csv, process_genpass, process_encode, process_decode};

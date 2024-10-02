@@ -15,24 +15,13 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use crate::opts::OutputFormat;
-use csv::Reader;
-use serde::{Deserialize, Serialize};
+use crate::cli::{CsvRecord, OutputFormat, TomlStruct};
+use csv::{Reader, ReaderBuilder};
 use std::fs;
+use serde_json::Value;
 
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "PascalCase")] // 首字母大写
-struct Player {
-    name: String,
-    position: String,
-    #[serde(rename = "DOB")]
-    dob: String,
-    nationality: String,
-    #[serde(rename = "Kit Number")]
-    kit: u8,
-}
-
-pub fn process_csv(input: &str, output: String, format: OutputFormat) -> anyhow::Result<()> {
+#[allow(dead_code)]
+pub fn process_csv_old(input: &str, output: String, format: OutputFormat) -> anyhow::Result<()> {
     let mut reader = Reader::from_path(input)?;
     let mut ret = Vec::with_capacity(128);
     let headers = reader.headers()?.clone();
@@ -50,7 +39,60 @@ pub fn process_csv(input: &str, output: String, format: OutputFormat) -> anyhow:
     let content = match format {
         OutputFormat::Json => serde_json::to_string_pretty(&ret)?,
         OutputFormat::Yaml => serde_yaml::to_string(&ret)?,
+        _ => serde_json::to_string_pretty(&ret)?,
     };
     fs::write(output, content).expect("Failed to write to file");
     Ok(())
+}
+
+pub fn process_csv(
+    input: &str,
+    output: &str,
+    format: OutputFormat,
+    delimiter: char,
+    header: bool,
+) -> anyhow::Result<()> {
+    let csv_record = read_csv(input, delimiter, header)?;
+    let contents = csv_convert(csv_record, format)?;
+    output_contents(output, &contents);
+    Ok(())
+}
+
+pub fn output_contents(output: &str, contents: &str) {
+    if output != "-" {
+        fs::write(output, contents).unwrap();
+    } else {
+        println!("{}", contents);
+    }
+}
+
+fn csv_convert(csv_record: CsvRecord, format: OutputFormat) -> anyhow::Result<String> {
+    match format {
+        OutputFormat::Raw => Ok(csv_record.into()),
+        OutputFormat::Json => {
+            let contents: Vec<Value> = csv_record.into();
+            Ok(serde_json::to_string_pretty(&contents)?)
+        }
+        OutputFormat::Yaml => {
+            let contents: Vec<Value> = csv_record.into();
+            Ok(serde_yaml::to_string(&contents)?)
+        }
+        OutputFormat::Toml => {
+            let contents = TomlStruct::new(csv_record.into());
+            Ok(toml::to_string(&contents)?)
+        }
+    }
+}
+
+fn read_csv(input: &str, delimiter: char, header: bool) -> anyhow::Result<CsvRecord> {
+    let rdr = ReaderBuilder::new()
+        .delimiter(delimiter as u8)
+        .from_path(input)?;
+
+    let csv_record: CsvRecord = rdr.try_into()?;
+    if header {
+        Ok(csv_record)
+    } else {
+        Ok(CsvRecord::new(None, csv_record.records))
+    }
 }

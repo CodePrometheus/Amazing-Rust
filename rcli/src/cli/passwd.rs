@@ -15,10 +15,22 @@
 // specific language governing permissions and limitations
 // under the License.
 
-mod csv;
-mod passwd;
-mod base64;
+use clap::Parser;
 
-pub use csv::process_csv;
-pub use passwd::process_genpass;
-pub use base64::{process_encode, process_decode};
+#[derive(Debug, Parser)]
+pub struct GenPassOpts {
+    #[arg(short, long, default_value_t = 16)]
+    pub length: u8,
+
+    #[arg(long, default_value_t = true)]
+    pub uppercase: bool,
+
+    #[arg(long, default_value_t = true)]
+    pub lowercase: bool,
+
+    #[arg(long, default_value_t = true)]
+    pub number: bool,
+
+    #[arg(long, default_value_t = true)]
+    pub symbol: bool,
+}

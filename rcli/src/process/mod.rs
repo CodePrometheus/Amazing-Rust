@@ -21,4 +21,4 @@ mod base64;
 
 pub use csv::process_csv;
 pub use passwd::process_genpass;
-pub use base64::{process_encode, process_decode};
+pub use base64::{process_encode, process_decode, get_reader, process_base64};

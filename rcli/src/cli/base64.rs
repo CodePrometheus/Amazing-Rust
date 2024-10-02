@@ -82,3 +82,8 @@ impl Display for Base64Format {
         write!(f, "{}", Into::<&str>::into(*self))
     }
 }
+
+pub enum Base64Action {
+    Decode,
+    Encode,
+}

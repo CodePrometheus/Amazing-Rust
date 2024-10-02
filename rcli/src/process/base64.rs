@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use crate::cli::Base64Format;
+use crate::cli::{Base64Action, Base64Format};
 use anyhow::Result;
 use base64::{
     engine::general_purpose::{STANDARD, URL_SAFE_NO_PAD},
@@ -31,18 +31,17 @@ pub fn process_encode(input: &str, format: Base64Format) -> Result<()> {
         Base64Format::Standard => STANDARD.encode(&buf),
         Base64Format::UrlSafe => URL_SAFE_NO_PAD.encode(&buf),
     };
-    println!("{}", encoded);
+    println!("encoded = {}", encoded);
     Ok(())
 }
 
 // dyn Read 表示一个实现了Read trait的动态分发对象，在运行时决定具体使用哪个类型，而不是在编译器确定
-fn get_reader(input: &str) -> Result<Box<dyn Read>> {
-    let reader: Box<dyn Read> = if input == "-" {
-        Box::new(std::io::stdin())
+pub fn get_reader(input: &str) -> Result<Box<dyn Read>> {
+    if input == "-" {
+        Ok(Box::new(std::io::stdin()))
     } else {
-        Box::new(File::open(input)?)
-    };
-    Ok(reader)
+        Ok(Box::new(File::open(input)?))
+    }
 }
 
 pub fn process_decode(input: &str, format: Base64Format) -> Result<()> {
@@ -59,9 +58,33 @@ pub fn process_decode(input: &str, format: Base64Format) -> Result<()> {
     Ok(())
 }
 
+pub fn process_base64(
+    input: &mut dyn Read,
+    format: &Base64Format,
+    action: Base64Action,
+) -> Result<String> {
+    let mut buf = String::new();
+    input.read_to_string(&mut buf).expect("Failed to read input");
+    let buf = buf.trim();
+
+    let result = match (format, action) {
+        (Base64Format::Standard, Base64Action::Encode) => STANDARD.encode(buf),
+        (Base64Format::Standard, Base64Action::Decode) => {
+            String::from_utf8(STANDARD.decode(buf)?)?
+        }
+
+        (Base64Format::UrlSafe, Base64Action::Encode) => URL_SAFE_NO_PAD.encode(buf),
+        (Base64Format::UrlSafe, Base64Action::Decode) => {
+            String::from_utf8(URL_SAFE_NO_PAD.decode(buf)?)?
+        }
+    };
+    Ok(result)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::cli::Base64Action;
 
     #[test]
     fn test_process_encode() {
@@ -75,5 +98,41 @@ mod tests {
         let input = "fixtures/b64.txt";
         let format = Base64Format::UrlSafe;
         process_decode(input, format).unwrap();
+    }
+
+    #[test]
+    fn test_process_base64_encode_standard() {
+        let input = "hello world";
+        let mut input = input.as_bytes();
+        let result =
+            process_base64(&mut input, &Base64Format::Standard, Base64Action::Encode).unwrap();
+        assert_eq!(result, "aGVsbG8gd29ybGQ=");
+    }
+
+    #[test]
+    fn test_process_base64_decode_standard() {
+        let input = "aGVsbG8gd29ybGQ=";
+        let mut input = input.as_bytes();
+        let result =
+            process_base64(&mut input, &Base64Format::Standard, Base64Action::Decode).unwrap();
+        assert_eq!(result, "hello world");
+    }
+
+    #[test]
+    fn test_process_base64_encode_urlsafe() {
+        let input = "hello world";
+        let mut input = input.as_bytes();
+        let result =
+            process_base64(&mut input, &Base64Format::UrlSafe, Base64Action::Encode).unwrap();
+        assert_eq!(result, "aGVsbG8gd29ybGQ");
+    }
+
+    #[test]
+    fn test_process_base64_decode_urlsafe() {
+        let input = "aGVsbG8gd29ybGQ";
+        let mut input = input.as_bytes();
+        let result =
+            process_base64(&mut input, &Base64Format::UrlSafe, Base64Action::Decode).unwrap();
+        assert_eq!(result, "hello world");
     }
 }

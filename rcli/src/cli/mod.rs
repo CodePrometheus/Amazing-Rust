@@ -22,7 +22,7 @@ mod base64;
 use std::path::Path;
 
 pub use self::{
-    base64::{Base64SubCommand, Base64Format},
+    base64::{Base64SubCommand, Base64Format, Base64Action},
     csv::OutputFormat,
     csv::CsvRecord, csv::TomlStruct
 };

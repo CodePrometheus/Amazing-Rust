@@ -83,11 +83,23 @@ async fn main() -> anyhow::Result<()> {
                 let key = String::from_utf8(get_content(&opts.key)?)?;
                 let decrypted = process_decrypt(&mut reader, &key)?;
                 output_contents(&opts.output, &decrypted);
-            },
+            }
         },
         SubCommand::Http(subcommand) => match subcommand {
             HttpSubcommand::Server(opts) => {
                 process_http_server(opts.dir, &opts.host, opts.port).await?;
+            }
+        },
+        SubCommand::JWT(subcommand) => match subcommand {
+            JwtSubcommand::Sign(opts) => {
+                match process_jwt_sign(&opts.key, &opts.exp, opts.aud.clone(), opts.iss.clone(), opts.sub.clone()) {
+                    Ok(token) => println!("Sign JWT: \n{}", token),
+                    Err(e) => eprintln!("Error: {}", e),
+                }
+            }
+            JwtSubcommand::Verify(opts) => {
+                let verified = process_jwt_verify(&opts.key, &opts.token, opts.aud.clone());
+                println!("Verify JWT: {}", verified.is_ok());
             }
         },
     }

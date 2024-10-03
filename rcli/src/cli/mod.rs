@@ -27,8 +27,8 @@ pub use csv::*;
 pub use http::*;
 pub use passwd::*;
 pub use sign::*;
+pub use jwt::*;
 
-use crate::cli::jwt::JwtSubcommand;
 use clap::{command, Parser};
 
 #[derive(Debug, Parser)]

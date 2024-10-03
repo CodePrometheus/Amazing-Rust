@@ -17,13 +17,8 @@
 
 mod cli;
 mod process;
+mod utils;
 
-pub use cli::{Base64Action, Base64SubCommand, Opts, SubCommand};
-pub use process::{
-    get_reader,
-    process_base64,
-    process_csv,
-    process_decode,
-    process_encode,
-    process_genpass,
-};
+pub use cli::*;
+pub use process::*;
+pub use utils::*;

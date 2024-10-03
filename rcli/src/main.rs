@@ -17,17 +17,9 @@
 
 // rcli csv -i input.csv -o output.json --header -d ','
 
+use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
 use clap::Parser;
-use rcli::{
-    get_reader,
-    process_base64,
-    process_csv,
-    process_genpass,
-    Base64Action,
-    Base64SubCommand,
-    Opts,
-    SubCommand,
-};
+use rcli::*;
 
 
 fn main() -> anyhow::Result<()> {
@@ -59,7 +51,40 @@ fn main() -> anyhow::Result<()> {
                 let mut reader = get_reader(&opts.input)?;
                 process_base64(&mut reader, &opts.format, Base64Action::Decode)?;
             }
-        }
+        },
+        SubCommand::Sign(subcommand) => match subcommand {
+            SignSubCommand::Sign(opts) => {
+                let mut reader = get_reader(&opts.input)?;
+                let key = get_content(&opts.key)?;
+                let signed = process_sign(&mut reader, &key, opts.format)?;
+                // base64 output
+                let encoded = URL_SAFE_NO_PAD.encode(signed);
+                println!("{}", encoded);
+            }
+            SignSubCommand::Verify(opts) => {
+                let mut reader = get_reader(&opts.input)?;
+                let key = get_content(&opts.key)?;
+                let sig = get_content(&opts.sig)?;
+                let verified = process_verify(&mut reader, &key, &sig, opts.format)?;
+                println!("{}", verified);
+            }
+            SignSubCommand::Generate(opts) => {
+                let key = process_generate(opts.format);
+                output_contents(&opts.output, &key);
+            }
+            SignSubCommand::Encrypt(opts) => {
+                let mut reader = get_reader(&opts.input)?;
+                let key = String::from_utf8(get_content(&opts.key)?)?;
+                let encrypted = process_encrypt(&mut reader, &key)?;
+                output_contents(&opts.output, &encrypted);
+            }
+            SignSubCommand::Decrypt(opts) => {
+                let mut reader = get_reader(&opts.input)?;
+                let key = String::from_utf8(get_content(&opts.key)?)?;
+                let decrypted = process_decrypt(&mut reader, &key)?;
+                output_contents(&opts.output, &decrypted);
+            }
+        },
     }
     Ok(())
 }

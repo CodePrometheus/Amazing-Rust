@@ -16,12 +16,13 @@
 // under the License.
 
 use crate::cli::{Base64Action, Base64Format};
+use crate::get_reader;
 use anyhow::Result;
 use base64::{
     engine::general_purpose::{STANDARD, URL_SAFE_NO_PAD},
     Engine as _,
 };
-use std::{fs::File, io::Read};
+use std::io::Read;
 
 pub fn process_encode(input: &str, format: Base64Format) -> Result<()> {
     let mut reader = get_reader(input)?;
@@ -33,15 +34,6 @@ pub fn process_encode(input: &str, format: Base64Format) -> Result<()> {
     };
     println!("encoded = {}", encoded);
     Ok(())
-}
-
-// dyn Read 表示一个实现了Read trait的动态分发对象，在运行时决定具体使用哪个类型，而不是在编译器确定
-pub fn get_reader(input: &str) -> Result<Box<dyn Read>> {
-    if input == "-" {
-        Ok(Box::new(std::io::stdin()))
-    } else {
-        Ok(Box::new(File::open(input)?))
-    }
 }
 
 pub fn process_decode(input: &str, format: Base64Format) -> Result<()> {

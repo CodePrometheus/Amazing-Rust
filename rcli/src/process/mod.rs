@@ -18,7 +18,9 @@
 mod csv;
 mod passwd;
 mod base64;
+mod sign;
 
-pub use csv::process_csv;
-pub use passwd::process_genpass;
-pub use base64::{process_encode, process_decode, get_reader, process_base64};
+pub use base64::*;
+pub use csv::*;
+pub use passwd::*;
+pub use sign::*;

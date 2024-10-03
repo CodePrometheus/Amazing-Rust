@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use super::verify_input_file;
+use crate::verify_input;
 use std::fmt;
 use std::fmt::Display;
 use std::str::FromStr;
@@ -32,7 +32,7 @@ pub enum Base64SubCommand {
 
 #[derive(Debug, Parser)]
 pub struct Base64EncodeOpts {
-    #[arg(short, long, value_parser = verify_input_file, default_value = "-")]
+    #[arg(short, long, value_parser = verify_input, default_value = "-")]
     pub input: String,
     #[arg(long, value_parser = parse_base64_format, default_value = "standard")]
     pub format: Base64Format,
@@ -40,7 +40,7 @@ pub struct Base64EncodeOpts {
 
 #[derive(Debug, Parser)]
 pub struct Base64DecodeOpts {
-    #[arg(short, long, value_parser = verify_input_file, default_value = "-")]
+    #[arg(short, long, value_parser = verify_input, default_value = "-")]
     pub input: String,
     #[arg(long, value_parser = parse_base64_format, default_value = "standard")]
     pub format: Base64Format,

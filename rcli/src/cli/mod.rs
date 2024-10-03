@@ -18,15 +18,13 @@
 mod csv;
 mod passwd;
 mod base64;
+mod sign;
 
-use std::path::Path;
+pub use base64::*;
+pub use csv::*;
+pub use passwd::*;
+pub use sign::*;
 
-pub use self::{
-    base64::{Base64SubCommand, Base64Format, Base64Action},
-    csv::OutputFormat,
-    csv::CsvRecord, csv::TomlStruct
-};
-use self::{csv::CsvOpts, passwd::GenPassOpts};
 use clap::{command, Parser};
 
 #[derive(Debug, Parser)]
@@ -42,27 +40,8 @@ pub enum SubCommand {
     Csv(CsvOpts),
     #[command(name = "genpass", about = "Generate a random password")]
     GenPass(GenPassOpts),
-    #[command(subcommand)]
+    #[command(subcommand, about = "Base64 Encode/Decode")]
     Base64(Base64SubCommand),
-}
-
-fn verify_input_file(filename: &str) -> Result<String, &'static str> {
-    if filename == "-" || Path::new(filename).exists() {
-        Ok(filename.into())
-    } else {
-        Err("File does not exist")
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_verify_input_file() {
-        assert_eq!(verify_input_file("-"), Ok("-".into()));
-        assert_eq!(verify_input_file("*"), Err("File does not exist"));
-        assert_eq!(verify_input_file("Cargo.toml"), Ok("Cargo.toml".into()));
-        assert_eq!(verify_input_file("nonexistent"), Err("File does not exist"));
-    }
+    #[command(subcommand, about = "Text Sign/Verify")]
+    Sign(SignSubCommand),
 }

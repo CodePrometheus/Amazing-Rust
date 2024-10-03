@@ -20,6 +20,7 @@ mod passwd;
 mod base64;
 mod sign;
 mod http;
+mod jwt;
 
 pub use base64::*;
 pub use csv::*;

@@ -20,13 +20,15 @@ mod passwd;
 mod base64;
 mod sign;
 mod http;
+mod jwt;
 
 pub use base64::*;
 pub use csv::*;
+pub use http::*;
 pub use passwd::*;
 pub use sign::*;
-pub use http::*;
 
+use crate::cli::jwt::JwtSubcommand;
 use clap::{command, Parser};
 
 #[derive(Debug, Parser)]
@@ -48,4 +50,6 @@ pub enum SubCommand {
     Sign(SignSubCommand),
     #[command(subcommand, about = "Http server")]
     Http(HttpSubcommand),
+    #[command(subcommand, about = "JWT sign/verify")]
+    JWT(JwtSubcommand),
 }

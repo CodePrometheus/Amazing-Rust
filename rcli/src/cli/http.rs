@@ -15,37 +15,22 @@
 // specific language governing permissions and limitations
 // under the License.
 
-mod csv;
-mod passwd;
-mod base64;
-mod sign;
-mod http;
-
-pub use base64::*;
-pub use csv::*;
-pub use passwd::*;
-pub use sign::*;
-pub use http::*;
-
-use clap::{command, Parser};
+use std::path::PathBuf;
+use clap::Parser;
+use crate::verify_path;
 
 #[derive(Debug, Parser)]
-#[command(version, name = "rcli", author, about, long_about = None)]
-pub struct Opts {
-    #[command(subcommand)]
-    pub cmd: SubCommand,
+pub enum HttpSubcommand {
+    #[command(name = "server", about = "Start an HTTP static file server")]
+    Server(ServerOpts),
 }
 
 #[derive(Debug, Parser)]
-pub enum SubCommand {
-    #[command(name = "csv", about = "Show CSV, or convert CSV to other formats")]
-    Csv(CsvOpts),
-    #[command(name = "genpass", about = "Generate a random password")]
-    GenPass(GenPassOpts),
-    #[command(subcommand, about = "Base64 Encode/Decode")]
-    Base64(Base64SubCommand),
-    #[command(subcommand, about = "Text Sign/Verify")]
-    Sign(SignSubCommand),
-    #[command(subcommand, about = "Http server")]
-    Http(HttpSubcommand),
+pub struct ServerOpts {
+    #[arg(short, long, help = "directory to serve", value_parser = verify_path, default_value = ".")]
+    pub dir: PathBuf,
+    #[arg(long, help = "host to listen on", default_value = "0.0.0.0")]
+    pub host: String,
+    #[arg(short, long, help = "port to listen on", default_value = "8080")]
+    pub port: u16,
 }

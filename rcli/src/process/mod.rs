@@ -19,8 +19,10 @@ mod csv;
 mod passwd;
 mod base64;
 mod sign;
+mod http;
 
 pub use base64::*;
 pub use csv::*;
 pub use passwd::*;
 pub use sign::*;
+pub use http::*;

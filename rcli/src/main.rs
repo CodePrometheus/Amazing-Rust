@@ -21,8 +21,8 @@ use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
 use clap::Parser;
 use rcli::*;
 
-
-fn main() -> anyhow::Result<()> {
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
     let opts = Opts::parse();
     match opts.cmd {
         SubCommand::Csv(opts) => {
@@ -42,7 +42,7 @@ fn main() -> anyhow::Result<()> {
                 opts.symbol,
             )?;
         }
-        SubCommand::Base64(subcmd) => match subcmd {
+        SubCommand::Base64(subcommand) => match subcommand {
             Base64SubCommand::Encode(opts) => {
                 let mut reader = get_reader(&opts.input)?;
                 process_base64(&mut reader, &opts.format, Base64Action::Encode)?;
@@ -83,6 +83,11 @@ fn main() -> anyhow::Result<()> {
                 let key = String::from_utf8(get_content(&opts.key)?)?;
                 let decrypted = process_decrypt(&mut reader, &key)?;
                 output_contents(&opts.output, &decrypted);
+            },
+        },
+        SubCommand::Http(subcommand) => match subcommand {
+            HttpSubcommand::Server(opts) => {
+                process_http_server(opts.dir, &opts.host, opts.port).await?;
             }
         },
     }

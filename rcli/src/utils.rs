@@ -18,6 +18,7 @@
 use anyhow::{Error, Result};
 use blake3::Hash;
 use std::{fs, io::Read, path::Path};
+use std::path::PathBuf;
 
 pub fn verify_input(filename: &str) -> Result<String, &'static str> {
     if filename == "-" || Path::new(filename).exists() {
@@ -65,6 +66,16 @@ pub fn decode_hex(s: &str) -> Result<Vec<u8>> {
         .step_by(2)
         .map(|i| u8::from_str_radix(&s[i..i + 2], 16).map_err(Into::into))
         .collect::<Result<Vec<u8>, Error>>()
+}
+
+pub fn verify_path(path: &str) -> std::result::Result<PathBuf, &'static str> {
+    // if input is "-" or file exists
+    let p = Path::new(path);
+    if p.exists() && p.is_dir() {
+        Ok(path.into())
+    } else {
+        Err("Path does not exist or is not a directory")
+    }
 }
 
 #[cfg(test)]

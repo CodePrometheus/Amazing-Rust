@@ -25,11 +25,13 @@ mod jwt;
 pub use base64::*;
 pub use csv::*;
 pub use http::*;
+pub use jwt::*;
 pub use passwd::*;
 pub use sign::*;
-pub use jwt::*;
 
+use anyhow::Result;
 use clap::{command, Parser};
+use enum_dispatch::enum_dispatch;
 
 #[derive(Debug, Parser)]
 #[command(version, name = "rcli", author, about, long_about = None)]
@@ -39,6 +41,7 @@ pub struct Opts {
 }
 
 #[derive(Debug, Parser)]
+#[enum_dispatch(CmdExecutor)]
 pub enum SubCommand {
     #[command(name = "csv", about = "Show CSV, or convert CSV to other formats")]
     Csv(CsvOpts),
@@ -52,4 +55,10 @@ pub enum SubCommand {
     Http(HttpSubcommand),
     #[command(subcommand, about = "JWT sign/verify")]
     JWT(JwtSubcommand),
+}
+
+#[allow(async_fn_in_trait)]
+#[enum_dispatch]
+pub trait CmdExecutor {
+    async fn execute(self) -> Result<()>;
 }

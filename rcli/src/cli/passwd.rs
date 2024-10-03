@@ -15,7 +15,21 @@
 // specific language governing permissions and limitations
 // under the License.
 
+use crate::{process_genpass, CmdExecutor};
 use clap::Parser;
+
+impl CmdExecutor for GenPassOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        process_genpass(
+            self.length,
+            self.uppercase,
+            self.lowercase,
+            self.number,
+            self.symbol,
+        )?;
+        Ok(())
+    }
+}
 
 #[derive(Debug, Parser)]
 pub struct GenPassOpts {

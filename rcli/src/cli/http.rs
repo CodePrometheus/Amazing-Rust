@@ -15,11 +15,20 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use std::path::PathBuf;
+use crate::{verify_path, CmdExecutor};
 use clap::Parser;
-use crate::verify_path;
+use enum_dispatch::enum_dispatch;
+use std::path::PathBuf;
+
+impl CmdExecutor for ServerOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        crate::process_http_server(&self.dir, &self.host, self.port).await?;
+        Ok(())
+    }
+}
 
 #[derive(Debug, Parser)]
+#[enum_dispatch(CmdExecutor)]
 pub enum HttpSubcommand {
     #[command(name = "server", about = "Start an HTTP static file server")]
     Server(ServerOpts),
@@ -27,7 +36,8 @@ pub enum HttpSubcommand {
 
 #[derive(Debug, Parser)]
 pub struct ServerOpts {
-    #[arg(short, long, help = "directory to serve", value_parser = verify_path, default_value = ".")]
+    #[arg(short, long, help = "directory to serve", value_parser = verify_path, default_value = "."
+    )]
     pub dir: PathBuf,
     #[arg(long, help = "host to listen on", default_value = "0.0.0.0")]
     pub host: String,

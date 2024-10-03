@@ -36,8 +36,6 @@ pub struct AppState {
 }
 
 pub async fn process_http_server(dir: impl AsRef<std::path::Path>, host: &str, port: u16) -> Result<()> {
-    tracing_subscriber::fmt::init();
-
     let addr = if Ipv6Addr::from_str(&host).is_ok() {
         SocketAddr::from_str(&format!("[{}]:{}", host, port))?
     } else {

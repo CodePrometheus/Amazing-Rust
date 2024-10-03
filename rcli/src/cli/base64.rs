@@ -15,14 +15,36 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use crate::verify_input;
+use crate::{get_reader, process_base64, verify_input, CmdExecutor};
 use std::fmt;
 use std::fmt::Display;
 use std::str::FromStr;
 
 use clap::Parser;
+use enum_dispatch::enum_dispatch;
+
+impl CmdExecutor for Base64EncodeOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let mut reader = get_reader(&self.input)?;
+        let encoded =
+            process_base64(&mut reader, &self.format, Base64Action::Encode)?;
+        println!("{}", encoded);
+        Ok(())
+    }
+}
+
+impl CmdExecutor for Base64DecodeOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let mut reader = get_reader(&self.input)?;
+        let decoded =
+            process_base64(&mut reader, &self.format, Base64Action::Decode)?;
+        println!("{}", decoded);
+        Ok(())
+    }
+}
 
 #[derive(Debug, Parser)]
+#[enum_dispatch(CmdExecutor)]
 pub enum Base64SubCommand {
     #[command(name = "encode", about = "Encode a string to base64")]
     Encode(Base64EncodeOpts),

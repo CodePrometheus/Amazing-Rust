@@ -15,9 +15,28 @@
 // specific language governing permissions and limitations
 // under the License.
 
+use crate::CmdExecutor;
 use clap::Parser;
+use enum_dispatch::enum_dispatch;
+
+impl CmdExecutor for JWTEncodeOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let token = crate::process_jwt_sign(&self.key, &self.exp, self.aud, self.iss, self.sub)?;
+        println!("Sign JWT: \n{}", token);
+        Ok(())
+    }
+}
+
+impl CmdExecutor for JWTDecodeOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let verified = crate::process_jwt_verify(&self.key, &self.token, self.aud);
+        println!("Verify JWT: {}", verified.is_ok());
+        Ok(())
+    }
+}
 
 #[derive(Debug, Parser)]
+#[enum_dispatch(CmdExecutor)]
 pub enum JwtSubcommand {
     #[command(name = "sign", about = "Sign a JWT")]
     Sign(JWTEncodeOpts),

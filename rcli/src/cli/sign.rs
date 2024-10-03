@@ -15,10 +15,65 @@
 // specific language governing permissions and limitations
 // under the License.
 
+use crate::{get_content, get_reader, output_contents, process_decrypt, process_encrypt, process_generate, process_sign, process_verify, verify_input, CmdExecutor};
+use base64::engine::general_purpose::URL_SAFE_NO_PAD;
+use base64::Engine;
 use clap::Parser;
-use crate::verify_input;
+use enum_dispatch::enum_dispatch;
+
+impl CmdExecutor for SignOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let mut reader = get_reader(&self.input)?;
+        let key = get_content(&self.key)?;
+        let signed = process_sign(&mut reader, &key, self.format)?;
+        // base64 output
+        let encoded = URL_SAFE_NO_PAD.encode(signed);
+        println!("{}", encoded);
+        Ok(())
+    }
+}
+
+impl CmdExecutor for VerifyOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let mut reader = get_reader(&self.input)?;
+        let key = get_content(&self.key)?;
+        let sig = get_content(&self.sig)?;
+        let verified = process_verify(&mut reader, &key, &sig, self.format)?;
+        println!("{}", verified);
+        Ok(())
+    }
+}
+
+impl CmdExecutor for GenerateOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let key = process_generate(self.format);
+        output_contents(&self.output, &key);
+        Ok(())
+    }
+}
+
+impl CmdExecutor for EncryptOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let mut reader = get_reader(&self.input)?;
+        let key = String::from_utf8(get_content(&self.key)?)?;
+        let encrypted = process_encrypt(&mut reader, &key)?;
+        output_contents(&self.output, &encrypted);
+        Ok(())
+    }
+}
+
+impl CmdExecutor for DecryptOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let mut reader = get_reader(&self.input)?;
+        let key = String::from_utf8(get_content(&self.key)?)?;
+        let decrypted = process_decrypt(&mut reader, &key)?;
+        output_contents(&self.output, &decrypted);
+        Ok(())
+    }
+}
 
 #[derive(Debug, Parser)]
+#[enum_dispatch(CmdExecutor)]
 pub enum SignSubCommand {
     #[command(name = "sign", about = "Sign a message")]
     Sign(SignOpts),

@@ -15,13 +15,32 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use std::fmt;
+use crate::CmdExecutor;
 use clap::Parser;
 use csv::{Reader, StringRecord};
 use serde::Serialize;
 use serde_json::Value;
+use std::fmt;
 use std::fs::File;
 use std::str::FromStr;
+
+impl CmdExecutor for CsvOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let output = if let Some(output) = self.output {
+            output.clone()
+        } else {
+            format!("output.{}", self.format)
+        };
+        crate::process_csv(
+            &self.input,
+            &output,
+            self.format,
+            self.delimiter,
+            self.header,
+        )?;
+        Ok(())
+    }
+}
 
 #[derive(Debug)]
 pub struct CsvRecord {

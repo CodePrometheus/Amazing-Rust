@@ -15,9 +15,11 @@
 // specific language governing permissions and limitations
 // under the License.
 
-mod metrics;
-mod vector;
-mod matrix;
+use concurrency::Matrix;
 
-pub use matrix::Matrix;
-pub use vector::{dot_product, Vector};
+fn main() {
+    let a = Matrix::new([1, 2, 3, 4, 5, 6], 2, 3);
+    let b = Matrix::new([1, 2, 3, 4, 5, 6], 3, 2);
+
+    println!("a * b: {}", a * b);
+}

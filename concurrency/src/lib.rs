@@ -15,9 +15,10 @@
 // specific language governing permissions and limitations
 // under the License.
 
-mod metrics;
 mod vector;
 mod matrix;
+mod metrics;
 
 pub use matrix::Matrix;
 pub use vector::{dot_product, Vector};
+pub use metrics::{Metrics};

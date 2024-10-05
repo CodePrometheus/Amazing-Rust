@@ -15,8 +15,3 @@
 // specific language governing permissions and limitations
 // under the License.
 
-mod amap;
-mod cmap;
-mod metrics_default;
-
-pub use metrics_default::*;

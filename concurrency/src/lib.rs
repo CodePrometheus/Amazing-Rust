@@ -21,4 +21,4 @@ mod metrics;
 
 pub use matrix::Matrix;
 pub use vector::{dot_product, Vector};
-pub use metrics::{Metrics};
+pub use metrics::*;

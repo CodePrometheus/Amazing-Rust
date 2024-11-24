@@ -1,0 +1,78 @@
+  [2m2024-11-24T08:03:05.541464Z[0m [32m INFO[0m [1;32maxum_tracing[0m[32m: [32mStaring server on 0.0.0.0:8080[0m
+    [2;3mat[0m examples/axum_tracing.rs:66
+
+  [2m2024-11-24T08:03:46.406765Z[0m [32m INFO[0m [1;32maxum_tracing[0m[32m: [32mStaring server on 0.0.0.0:8080[0m
+    [2;3mat[0m examples/axum_tracing.rs:66
+
+  [2m2024-11-24T08:14:37.581616Z[0m [32m INFO[0m [1;32maxum_tracing[0m[32m: [32mStaring server on 0.0.0.0:8080[0m
+    [2;3mat[0m examples/axum_tracing.rs:66
+
+  [2m2024-11-24T08:14:40.391254Z[0m [33m WARN[0m [1;33maxum_tracing[0m[33m: [33mtask takes too long, [1;33mapp.task_duration[0m[33m: 12[0m
+    [2;3mat[0m examples/axum_tracing.rs:80
+    [2;3min[0m axum_tracing::[1mindex_handler[0m
+
+  [2m2024-11-24T08:31:38.996791Z[0m [32m INFO[0m [1;32maxum_tracing[0m[32m: [32mStaring server on 0.0.0.0:8080[0m
+    [2;3mat[0m examples/axum_tracing.rs:67
+
+  [2m2024-11-24T08:31:50.348037Z[0m [33m WARN[0m [1;33maxum_tracing[0m[33m: [33mtask takes too long, [1;33mapp.task_duration[0m[33m: 11[0m
+    [2;3mat[0m examples/axum_tracing.rs:81
+    [2;3min[0m axum_tracing::[1mindex_handler[0m
+
+  [2m2024-11-24T08:33:24.729257Z[0m [32m INFO[0m [1;32maxum_tracing[0m[32m: [32mStaring server on 0.0.0.0:8080[0m
+    [2;3mat[0m examples/axum_tracing.rs:67
+
+  [2m2024-11-24T08:34:15.877991Z[0m [33m WARN[0m [1;33maxum_tracing[0m[33m: [33mtask takes too long, [1;33mapp.task_duration[0m[33m: 12[0m
+    [2;3mat[0m examples/axum_tracing.rs:81
+    [2;3min[0m axum_tracing::[1mindex_handler[0m
+
+  [2m2024-11-24T08:35:27.919334Z[0m [32m INFO[0m [1;32maxum_tracing[0m[32m: [32mStaring server on 0.0.0.0:8080[0m
+    [2;3mat[0m examples/axum_tracing.rs:67
+
+  [2m2024-11-24T08:35:39.863963Z[0m [33m WARN[0m [1;33maxum_tracing[0m[33m: [33mtask takes too long, [1;33mapp.task_duration[0m[33m: 12[0m
+    [2;3mat[0m examples/axum_tracing.rs:81
+    [2;3min[0m axum_tracing::[1mindex_handler[0m
+
+  [2m2024-11-24T08:35:40.557994Z[0m [33m WARN[0m [1;33maxum_tracing[0m[33m: [33mtask takes too long, [1;33mapp.task_duration[0m[33m: 12[0m
+    [2;3mat[0m examples/axum_tracing.rs:81
+    [2;3min[0m axum_tracing::[1mindex_handler[0m
+
+  [2m2024-11-24T08:40:10.143114Z[0m [32m INFO[0m [1;32maxum_tracing[0m[32m: [32mStaring server on 0.0.0.0:8080[0m
+    [2;3mat[0m examples/axum_tracing.rs:66
+
+  [2m2024-11-24T08:40:37.042413Z[0m [32m INFO[0m [1;32maxum_tracing[0m[32m: [32mStaring server on 0.0.0.0:8080[0m
+    [2;3mat[0m examples/axum_tracing.rs:66
+
+  [2m2024-11-24T08:40:39.301919Z[0m [33m WARN[0m [1;33maxum_tracing[0m[33m: [33mtask takes too long, [1;33mapp.task_duration[0m[33m: 18[0m
+    [2;3mat[0m examples/axum_tracing.rs:80
+    [2;3min[0m axum_tracing::[1mindex_handler[0m [2;3mwith[0m [1mreq[0m: Request { method: GET, uri: /, version: HTTP/1.1, headers: {"host": "localhost:8080", "user-agent": "curl/8.7.1", "accept": "*/*"}, body: Body(UnsyncBoxBody) }, [1mhttp.uri[0m: "/", [1mhttp.method[0m: "GET"
+
+  [2m2024-11-24T08:41:33.540843Z[0m [32m INFO[0m [1;32maxum_tracing[0m[32m: [32mStaring server on 0.0.0.0:8080[0m
+    [2;3mat[0m examples/axum_tracing.rs:66
+
+  [2m2024-11-24T08:41:45.361885Z[0m [33m WARN[0m [1;33maxum_tracing[0m[33m: [33mtask takes too long, [1;33mapp.task_duration[0m[33m: 19[0m
+    [2;3mat[0m examples/axum_tracing.rs:80
+    [2;3min[0m axum_tracing::[1mzhouzixin[0m [2;3mwith[0m [1mreq[0m: Request { method: GET, uri: /, version: HTTP/1.1, headers: {"host": "localhost:8080", "user-agent": "curl/8.7.1", "accept": "*/*"}, body: Body(UnsyncBoxBody) }, [1mhttp.uri[0m: "/", [1mhttp.method[0m: "GET"
+
+  [2m2024-11-24T08:44:34.681609Z[0m [33m WARN[0m [1;33maxum_tracing[0m[33m: [33mtask takes too long, [1;33mapp.task_duration[0m[33m: 12[0m
+    [2;3mat[0m examples/axum_tracing.rs:80
+    [2;3min[0m axum_tracing::[1mzhouzixin[0m [2;3mwith[0m [1mreq[0m: Request { method: GET, uri: /, version: HTTP/1.1, headers: {"host": "localhost:8080", "user-agent": "curl/8.7.1", "accept": "*/*"}, body: Body(UnsyncBoxBody) }, [1mhttp.uri[0m: "/", [1mhttp.method[0m: "GET"
+
+  [2m2024-11-24T08:45:00.778752Z[0m [32m INFO[0m [1;32maxum_tracing[0m[32m: [32mStaring server on 0.0.0.0:8080[0m
+    [2;3mat[0m examples/axum_tracing.rs:66
+
+  [2m2024-11-24T08:45:03.470404Z[0m [33m WARN[0m [1;33maxum_tracing[0m[33m: [33mtask takes too long, [1;33mapp.task_duration[0m[33m: 15[0m
+    [2;3mat[0m examples/axum_tracing.rs:80
+    [2;3min[0m axum_tracing::[1mindex_handler[0m [2;3mwith[0m [1mreq[0m: Request { method: GET, uri: /, version: HTTP/1.1, headers: {"host": "localhost:8080", "user-agent": "curl/8.7.1", "accept": "*/*"}, body: Body(UnsyncBoxBody) }, [1mhttp.uri[0m: "/", [1mhttp.method[0m: "GET"
+
+  [2m2024-11-24T08:45:03.939190Z[0m [33m WARN[0m [1;33maxum_tracing[0m[33m: [33mtask takes too long, [1;33mapp.task_duration[0m[33m: 16[0m
+    [2;3mat[0m examples/axum_tracing.rs:80
+    [2;3min[0m axum_tracing::[1mindex_handler[0m [2;3mwith[0m [1mreq[0m: Request { method: GET, uri: /, version: HTTP/1.1, headers: {"host": "localhost:8080", "user-agent": "curl/8.7.1", "accept": "*/*"}, body: Body(UnsyncBoxBody) }, [1mhttp.uri[0m: "/", [1mhttp.method[0m: "GET"
+
+  [2m2024-11-24T08:45:04.379529Z[0m [33m WARN[0m [1;33maxum_tracing[0m[33m: [33mtask takes too long, [1;33mapp.task_duration[0m[33m: 12[0m
+    [2;3mat[0m examples/axum_tracing.rs:80
+    [2;3min[0m axum_tracing::[1mindex_handler[0m [2;3mwith[0m [1mreq[0m: Request { method: GET, uri: /, version: HTTP/1.1, headers: {"host": "localhost:8080", "user-agent": "curl/8.7.1", "accept": "*/*"}, body: Body(UnsyncBoxBody) }, [1mhttp.uri[0m: "/", [1mhttp.method[0m: "GET"
+
+  [2m2024-11-24T08:45:04.789642Z[0m [33m WARN[0m [1;33maxum_tracing[0m[33m: [33mtask takes too long, [1;33mapp.task_duration[0m[33m: 16[0m
+    [2;3mat[0m examples/axum_tracing.rs:80
+    [2;3min[0m axum_tracing::[1mindex_handler[0m [2;3mwith[0m [1mreq[0m: Request { method: GET, uri: /, version: HTTP/1.1, headers: {"host": "localhost:8080", "user-agent": "curl/8.7.1", "accept": "*/*"}, body: Body(UnsyncBoxBody) }, [1mhttp.uri[0m: "/", [1mhttp.method[0m: "GET"
+
